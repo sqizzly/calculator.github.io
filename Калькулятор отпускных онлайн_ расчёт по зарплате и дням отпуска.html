@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Калькулятор отпускных онлайн: расчёт по зарплате и дням отпуска</title>
+<meta name="description" content="Бесплатный калькулятор отпускных: введите среднюю зарплату и число дней отпуска, получите сумму до и после НДФЛ. Формула, пример расчёта и ответы на частые вопросы.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Как рассчитываются отпускные?","acceptedAnswer":{"@type":"Answer","text":"Отпускные равны среднему дневному заработку, умноженному на число календарных дней отпуска. Средний дневной заработок считается как доход за 12 месяцев, делённый на 12 и на 29,3."}},
+{"@type":"Question","name":"Почему в формуле число 29,3?","acceptedAnswer":{"@type":"Answer","text":"29,3 — среднемесячное число календарных дней, установленное для расчёта отпускных. Оно одинаково для всех работодателей."}},
+{"@type":"Question","name":"Сколько дней отпуска оплачивается?","acceptedAnswer":{"@type":"Answer","text":"Оплачиваются календарные дни отпуска, но нерабочие праздничные дни, попавшие в отпуск, в его продолжительность не включаются."}}
+]}
+</script>
+<style>
+:root{
+  --bg:#eef1f6; --surface:#ffffff; --ink:#14213d; --muted:#53607a;
+  --line:#cfd6e4; --navy:#0b2a5b; --navy2:#123a7a; --gold:#e7b23a; --gold-ink:#3a2a00;
+  --field:#f6f8fc; --link:#0b4fb3;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0a1222; --surface:#111c33; --ink:#e8edf7; --muted:#a2aec8;
+    --line:#26365a; --navy:#071a3d; --navy2:#0d2b5e; --gold:#f0bf4a; --gold-ink:#2e2100;
+    --field:#0c1730; --link:#8db8ff; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0a1222; --surface:#111c33; --ink:#e8edf7; --muted:#a2aec8;
+  --line:#26365a; --navy:#071a3d; --navy2:#0d2b5e; --gold:#f0bf4a; --gold-ink:#2e2100;
+  --field:#0c1730; --link:#8db8ff; color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 "Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.top{background:var(--navy);color:#fff;border-bottom:5px solid var(--gold);padding:36px 18px 78px}
+.wrap{max-width:680px;margin:0 auto}
+h1{font:700 clamp(30px,6.5vw,46px)/1.12 Georgia,"Times New Roman",serif;margin:0 0 12px;letter-spacing:-.005em}
+.lead{margin:0;color:#c9d6ef;max-width:54ch}
+main{max-width:680px;margin:-52px auto 0;padding:0 18px 56px}
+h2{font:700 24px/1.25 Georgia,"Times New Roman",serif;margin:40px 0 10px;padding-bottom:8px;border-bottom:2px solid var(--gold)}
+p{margin:0 0 12px}
+.calc{background:var(--surface);border:1px solid var(--line);border-top:5px solid var(--navy2);border-radius:4px;padding:22px;box-shadow:0 8px 24px rgba(7,26,61,.18)}
+label{display:block;font-weight:700;font-size:15px;margin:0 0 6px}
+.row{margin-bottom:16px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+input,select{width:100%;font:inherit;font-size:19px;padding:12px;border:2px solid var(--line);border-radius:3px;background:var(--field);color:var(--ink)}
+input:focus,select:focus{border-color:var(--navy2)}
+input:focus-visible,select:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.hint{font-size:14px;color:var(--muted);margin:5px 0 0}
+.result{background:var(--navy);color:#fff;border-radius:3px;padding:22px 20px;margin-top:6px;border-left:8px solid var(--gold)}
+.result .sub{margin:0;color:#c9d6ef;font-size:15px}
+.big{font:700 clamp(40px,11vw,60px)/1.05 Georgia,"Times New Roman",serif;margin:2px 0 0;color:var(--gold)}
+dl{display:grid;grid-template-columns:1fr auto;gap:8px 12px;margin:18px 0 0;padding-top:14px;border-top:1px solid rgba(255,255,255,.22);font-size:16px}
+dt{color:#c9d6ef} dd{margin:0;font-weight:700;text-align:right}
+code{font:15px/1.5 Consolas,monospace;background:var(--surface);border:1px solid var(--line);padding:3px 7px;border-radius:3px}
+.partner{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--gold);padding:16px 18px;margin-top:28px;border-radius:3px}
+.partner a{color:var(--link);font-weight:700}
+details{border-bottom:1px solid var(--line);padding:12px 0}
+summary{cursor:pointer;font-weight:700}
+details p{margin:8px 0 0}
+footer{margin-top:40px;font-size:14px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+.btn{font:inherit;font-size:16px;font-weight:700;padding:12px 20px;border-radius:3px;cursor:pointer;border:2px solid var(--gold)}
+.btn-main{background:var(--gold);color:var(--gold-ink)}
+.btn-alt{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn:hover{filter:brightness(1.07)}
+.btn:focus-visible{outline:3px solid var(--link);outline-offset:2px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+@media (max-width:420px){.two{grid-template-columns:1fr}.btn{flex:1 1 100%}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <h1>Калькулятор отпускных</h1>
+  <p class="lead">Точный расчёт по формуле из трудового законодательства. Введите зарплату и число дней, результат появится мгновенно.</p>
+</div></header>
+<main>
+
+  <section class="calc" aria-label="Калькулятор">
+    <div class="row">
+      <label for="salary">Средняя зарплата в месяц до вычета НДФЛ, ₽</label>
+      <input id="salary" type="number" inputmode="decimal" min="0" step="1000" value="80000">
+      <p class="hint">Если зарплата менялась, укажите среднее за последние 12 месяцев.</p>
+    </div>
+    <div class="two">
+      <div class="row">
+        <label for="days">Дней отпуска</label>
+        <input id="days" type="number" inputmode="numeric" min="1" max="365" step="1" value="14">
+      </div>
+      <div class="row">
+        <label for="rate">Ставка НДФЛ</label>
+        <select id="rate">
+          <option value="0.13" selected>13%</option>
+          <option value="0.15">15%</option>
+          <option value="0.18">18%</option>
+          <option value="0.20">20%</option>
+          <option value="0.22">22%</option>
+          <option value="custom">Своя ставка…</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row" id="customRow" hidden>
+      <label for="custom">Ваша ставка НДФЛ, %</label>
+      <input id="custom" type="number" inputmode="decimal" min="0" max="100" step="0.1" value="13">
+    </div>
+
+    <div class="result" aria-live="polite">
+      <p class="sub">Отпускные на руки</p>
+      <p class="big" id="net">—</p>
+      <dl>
+        <dt>Начислено до НДФЛ</dt><dd id="gross">—</dd>
+        <dt>НДФЛ</dt><dd id="tax">—</dd>
+        <dt>Средний дневной заработок</dt><dd id="daily">—</dd>
+      </dl>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn btn-main" id="copyBtn">Скопировать расчёт</button>
+      <button type="button" class="btn btn-alt" id="resetBtn">Сбросить</button>
+    </div>
+  </section>
+
+  <div class="partner">
+    <p><strong>Нужно считать отпускные для всей команды?</strong> Сервисы онлайн-бухгалтерии делают это автоматически и сами сдают отчётность. <a href="#" rel="sponsored noopener">Сравнить сервисы</a></p>
+  </div>
+  <!-- Сюда вставьте код рекламного блока (Яндекс РСЯ или AdSense) -->
+
+  <h2>Как считаются отпускные</h2>
+  <p>Сначала находят средний дневной заработок, затем умножают его на число дней отпуска:</p>
+  <p><code>Отпускные = (Доход за 12 мес. ÷ 12 ÷ 29,3) × Дни отпуска</code></p>
+  <p>Пример: зарплата 80 000 ₽, отпуск 14 дней. Дневной заработок 80 000 ÷ 29,3 = 2 730,38 ₽. Отпускные 2 730,38 × 14 = 38 225,3 ₽ до налога, на руки при ставке 13% около 33 255 ₽.</p>
+
+  <h2>Частые вопросы</h2>
+  <details>
+    <summary>Почему в формуле число 29,3?</summary>
+    <p>Это среднемесячное число календарных дней, принятое для расчёта отпускных. Оно одинаково для всех работодателей.</p>
+  </details>
+  <details>
+    <summary>Какие дни считаются днями отпуска?</summary>
+    <p>Оплачиваются календарные дни, но нерабочие праздничные дни, которые попали в отпуск, в его продолжительность не входят. Если в вашем отпуске есть праздник, добавьте этот день к отпуску, а не вычитайте.</p>
+  </details>
+  <details>
+    <summary>Что если я работаю меньше года?</summary>
+    <p>Тогда доход считают за фактически отработанное время, и итог будет отличаться от калькулятора. Для такого случая используйте расчётный период у бухгалтера.</p>
+  </details>
+  <details>
+    <summary>Когда должны выплатить отпускные?</summary>
+    <p>Не позднее чем за три дня до начала отпуска.</p>
+  </details>
+
+  <footer>Расчёт ориентировочный и не заменяет консультацию бухгалтера. Премии, больничные и другие выплаты в расчётном периоде могут изменить итог.</footer>
+</main>
+
+<script>
+(function(){
+  var f = new Intl.NumberFormat("ru-RU",{minimumFractionDigits:2,maximumFractionDigits:2});
+  function $(id){return document.getElementById(id)}
+  function rub(v){return f.format(v)+"\u00a0₽"}
+  function calc(){
+    var sel = $("rate").value;
+    $("customRow").hidden = sel !== "custom";
+    var s = parseFloat($("salary").value), d = parseFloat($("days").value);
+    var r = sel === "custom" ? parseFloat($("custom").value)/100 : parseFloat(sel);
+    if(!(s>0) || !(d>0) || !(r>=0 && r<=1)){
+      $("net").textContent = "—"; $("gross").textContent = "—"; $("tax").textContent = "—"; $("daily").textContent = "—";
+      return;
+    }
+    var daily = s/29.3, gross = daily*d, tax = Math.round(gross*r), net = gross-tax;
+    $("net").textContent = rub(net);
+    $("gross").textContent = rub(gross);
+    $("tax").textContent = rub(tax);
+    $("daily").textContent = rub(daily);
+  }
+  ["salary","days","rate","custom"].forEach(function(id){ $(id).addEventListener("input",calc); });
+
+  var copyBtn = $("copyBtn"), copyLabel = copyBtn.textContent, timer;
+  function flash(t){
+    copyBtn.textContent = t; clearTimeout(timer);
+    timer = setTimeout(function(){ copyBtn.textContent = copyLabel; }, 2000);
+  }
+  function buildText(){
+    var sel = $("rate").value;
+    var rateText = sel === "custom" ? $("custom").value + "%" : $("rate").options[$("rate").selectedIndex].text;
+    return [
+      "Расчёт отпускных",
+      "Зарплата в месяц: " + f.format(parseFloat($("salary").value)) + "\u00a0₽",
+      "Дней отпуска: " + $("days").value,
+      "Ставка НДФЛ: " + rateText,
+      "Средний дневной заработок: " + $("daily").textContent,
+      "Начислено до НДФЛ: " + $("gross").textContent,
+      "НДФЛ: " + $("tax").textContent,
+      "На руки: " + $("net").textContent
+    ].join("\n");
+  }
+  function fallbackCopy(text){
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch(e) {}
+    document.body.removeChild(ta);
+    flash(ok ? "Скопировано" : "Не удалось скопировать");
+  }
+  copyBtn.addEventListener("click", function(){
+    if($("net").textContent === "—"){ flash("Сначала заполните поля"); return; }
+    var text = buildText();
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){ flash("Скопировано"); }, function(){ fallbackCopy(text); });
+    } else { fallbackCopy(text); }
+  });
+  $("resetBtn").addEventListener("click", function(){
+    $("salary").value = 80000; $("days").value = 14;
+    $("rate").value = "0.13"; $("custom").value = 13;
+    calc(); $("salary").focus();
+  });
+  calc();
+})();
+</script>
+</body>
+</html>
